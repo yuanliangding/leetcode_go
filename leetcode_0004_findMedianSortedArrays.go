@@ -87,16 +87,17 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 		return a
 	}
 	if len(nums1)%2 == 0 {
-		n2L := len(nums2)
-		nums2 = append(nums2, nums2[n2L-1])
+		n1L, n2L := len(nums1), len(nums2)
+		n1Last := nums1[n1L-1]
+		nums2 = append(nums2, n1Last)
 		i := n2L - 1
-		for i >= 0 && nums2[i] >= nums1[0] {
+		for i >= 0 && nums2[i] >= n1Last {
 			nums2[i+1] = nums2[i]
 			i--
 		}
-		nums2[i+1] = nums1[0]
+		nums2[i+1] = n1Last
 
-		nums1 = nums1[1:]
+		nums1 = nums1[:n1L-1]
 	}
 
 	ai, bi := len(nums1)/2, len(nums2)/2
