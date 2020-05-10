@@ -72,6 +72,27 @@ func main() {
 		fmt.Println("nums1=", nums1, ",nums2=", nums2, ",result=", result, " (expect=", expect, ")")
 		panic(expect)
 	}
+
+	nums1, nums2, expect = []int{1, 2}, []int{1, 1}, 1.0
+	result = findMedianSortedArrays(nums1, nums2)
+	if expect != result {
+		fmt.Println("nums1=", nums1, ",nums2=", nums2, ",result=", result, " (expect=", expect, ")")
+		panic(expect)
+	}
+
+	nums1, nums2, expect = []int{1, 2}, []int{-1, 3}, 1.5
+	result = findMedianSortedArrays(nums1, nums2)
+	if expect != result {
+		fmt.Println("nums1=", nums1, ",nums2=", nums2, ",result=", result, " (expect=", expect, ")")
+		panic(expect)
+	}
+
+	nums1, nums2, expect = []int{1, 4}, []int{2, 3, 5, 6}, 3.5
+	result = findMedianSortedArrays(nums1, nums2)
+	if expect != result {
+		fmt.Println("nums1=", nums1, ",nums2=", nums2, ",result=", result, " (expect=", expect, ")")
+		panic(expect)
+	}
 }
 
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
@@ -87,17 +108,40 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 		return a
 	}
 	if len(nums1)%2 == 0 {
+		fmt.Println("---------------")
+		fmt.Println("nums1 = ", nums1, "     nums2 = ", nums2)
 		n1L, n2L := len(nums1), len(nums2)
 		n1Last := nums1[n1L-1]
-		nums2 = append(nums2, n1Last)
-		i := n2L - 1
-		for i >= 0 && nums2[i] >= n1Last {
-			nums2[i+1] = nums2[i]
-			i--
+
+		begin, end, i := 0, n2L-1, -1
+		if n1Last < nums2[0] {
+			i = 0
+		} else if n1Last > nums2[end] {
+			i = end + 1
 		}
-		nums2[i+1] = n1Last
+		for i == -1 {
+			mid := (begin + end) / 2
+			midV := nums2[mid]
+			if midV == n1Last {
+				i = mid + 1
+			} else {
+				if mid == begin {
+					i = end
+				}
+				if midV > n1Last {
+					end = mid
+				} else {
+					begin = mid
+				}
+			}
+		}
+
+		nums2 = append(nums2, 0)
+		copy(nums2[i+1:], nums2[i:])
+		nums2[i] = n1Last
 
 		nums1 = nums1[:n1L-1]
+		fmt.Println("nums1 = ", nums1, "     nums2 = ", nums2)
 	}
 
 	ai, bi := len(nums1)/2, len(nums2)/2
