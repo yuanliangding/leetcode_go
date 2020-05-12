@@ -22,7 +22,7 @@ nums2 = [3, 4]
 则中位数是 (2 + 3)/2 = 2.5
 
 */
-func main() {
+func main_() {
 
 	nums1, nums2, expect := []int{1, 3}, []int{2}, 2.0
 	result := findMedianSortedArrays(nums1, nums2)
